@@ -1,0 +1,4 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+
+<t:submit t:id="paypal" value="PayPal" image="asset:context:images/paypal.gif" class="btn btn-default" />
+</html>
