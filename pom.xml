@@ -129,6 +129,6 @@ of testing facilities designed for use with TestNG (http://testng.org/), so it's
     </pluginRepositories>
 
     <properties>
-        <tapestry-release-version>5.4-alpha-20</tapestry-release-version>
+        <tapestry-release-version>5.4.0</tapestry-release-version>
     </properties>
 </project>

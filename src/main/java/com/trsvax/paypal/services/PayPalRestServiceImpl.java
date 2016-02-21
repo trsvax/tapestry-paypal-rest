@@ -22,6 +22,7 @@ import com.paypal.api.payments.RedirectUrls;
 import com.paypal.api.payments.SubTransaction;
 import com.paypal.api.payments.Transaction;
 import com.paypal.core.ConfigManager;
+import com.paypal.core.rest.APIContext;
 import com.paypal.core.rest.OAuthTokenCredential;
 import com.paypal.core.rest.PayPalRESTException;
 import com.paypal.core.rest.PayPalResource;
@@ -56,10 +57,12 @@ public class PayPalRestServiceImpl implements PayPalRestService {
 	public OAuthTokenCredential getCredentials() {
 		String clientID = ConfigManager.getInstance().getValue("clientID");
 		String clientSecret = ConfigManager.getInstance().getValue("clientSecret");
+		logger.info("PayPal id {}",clientID);
 		return new OAuthTokenCredential(clientID, clientSecret);
 	}
 
 	public String getToken() throws PayPalRESTException {
+		logger.info("get token");
 		return getCredentials().getAccessToken();
 	}
 
@@ -116,10 +119,17 @@ public class PayPalRestServiceImpl implements PayPalRestService {
         payPalPayment.setPayer(payer);
         payPalPayment.setTransactions(transactions);
 
-         Payment createdPayment = payPalPayment.create(getToken());
+        logger.info("create payment");
+        APIContext apiContext = new APIContext(getToken());
+        logger.info("request id {}", apiContext.getRequestId());
+         Payment createdPayment = payPalPayment.create(apiContext);
+         logger.info("payment id {}",createdPayment.getId());
          payment.setTransactionID(createdPayment.getId());
+         logger.info("id set");
          for ( SubTransaction subTransaction : createdPayment.getTransactions().get(0).getRelatedResources() ) {
+        	 logger.info("get sub id");
         	 String id = subTransaction.getSale().getId();
+        	 logger.info("sub id {}",id);
         	 payment.setTransactionID(id);
         	 break;
          }
